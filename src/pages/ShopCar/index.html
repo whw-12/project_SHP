@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    /* 把我们所有标签的内外边距清零 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* em 和 i 斜体的文字不倾斜 */
+em,
+i {
+  font-style: normal
+}
+
+/* 去掉li 的小圆点 */
+li {
+  list-style: none
+}
+
+img {
+  /* border 0 照顾低版本浏览器 如果 图片外面包含了链接会有边框的问题 */
+  border: 0;
+  /* 取消图片底侧有空白缝隙的问题 */
+  vertical-align: middle
+}
+
+button {
+  /* 当我们鼠标经过button 按钮的时候，鼠标变成小手 */
+  cursor: pointer
+}
+
+a {
+  color: #666;
+  text-decoration: none
+}
+
+a:hover {
+  color: #c81623
+}
+
+button,
+input {
+  /* "\5B8B\4F53" 就是宋体的意思 这样浏览器兼容性比较好 */
+  font-family: Microsoft YaHei, Heiti SC, tahoma, arial, Hiragino Sans GB, "\5B8B\4F53", sans-serif;
+  /* 默认有灰色边框我们需要手动去掉 */
+  border: 0;
+  outline: none;
+}
+
+body {
+  /* CSS3 抗锯齿形 让文字显示的更加清晰 */
+  -webkit-font-smoothing: antialiased;
+  background-color: #fff;
+  font: 12px/1.5 Microsoft YaHei, Heiti SC, tahoma, arial, Hiragino Sans GB, "\5B8B\4F53", sans-serif;
+  color: #666
+}
+
+.hide,
+.none {
+  display: none
+}
+
+/* 清除浮动 */
+.clearfix:after {
+  visibility: hidden;
+  clear: both;
+  display: block;
+  content: ".";
+  height: 0
+}
+
+.clearfix {
+  *zoom: 1
+}
+
+/* 版心 */
+.w {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.style_red {
+  color: #c40000;
+}
+/* -------------------------------- */
+ .cart h4 {
+   font-size: 14px;
+   margin: 10px 0;
+ }
+ .cart .cart-th {
+   height: 40px;
+   background-color: #f5f5f5;
+   border: 1px solid #ddd;
+ }
+ .cart .cart-th ul {
+   padding: 10px;
+ }
+ .cart .cart-th ul li {
+   float: left;
+   line-height: 20px;
+ }
+ .cart-th ul .cart-th1
+ ,.cart-th2 {
+   width: 294.5px;
+ }
+ .cart-th ul .cart-th3
+ ,.cart-th4
+ ,.cart-th5
+ ,.cart-th6 {
+   width: 147.25px;
+ }
+ /* ----------------------- */
+.cart-main {
+  margin-top: 10px;
+  border: 1px solid #ddd;
+}
+.cart-main ul {
+  height: 103px;
+  padding: 10px;
+}
+.cart-main ul li {
+  float: left;
+}
+.cart-main ul .cart-list1 {
+  width: 48px;
+}
+.cart-main ul .cart-list2 {
+  height: 82px;
+  width: 295px;
+}
+.cart-main ul .cart-list2 img {
+  width: 82px;
+  height: 82px;
+}
+.cart-main ul .cart-list2 p {
+  display: inline-block;
+  margin: 0 10px;
+  width: 150px;
+}
+.cart-main ul .cart-list3 {
+  width: 245px;
+  text-align: center;
+}
+.cart-main ul .cart-list4 {
+  width: 147px;
+}
+.cart-main ul .cart-list5 {
+  width: 147px;
+}
+.cart-main ul .cart-list5 input {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  color: #000;
+  line-height: 40px;
+  text-align: center;
+  font-weight: 700;
+}
+.cart-main ul .cart-list5 button {
+  height: 40px;
+  width: 20px;
+  line-height: 40px;
+}
+.cart-main ul .cart-list6 {
+  width: 147px;
+  font-size: 16px;
+}
+.cart-main1
+,.cart-main2 {
+  border-bottom: 1px solid #ddd;
+}
+/* ------------------------------------ */
+.cart-tool {
+  position: relative;
+  margin-top: 10px;
+  height: 50px;
+  border: 1px solid #ddd;
+}
+.cart-tool .tool {
+padding: 10px;
+}
+.cart-tool .select-all {
+  float: left;
+  height: 30px;
+  line-height: 30px;
+}
+.cart-tool .select-all em {
+  float: left;
+  margin-right: 20px;
+}
+.cart-tool .select-all ul {
+  width: 400px;
+}
+.cart-tool .select-all ul li {
+  float: left;
+  margin-right: 10px;
+}
+.cart-tool .submit {
+  float: right;
+}
+.cart-tool .submit input {
+  width: 0;
+  height: 0;
+}
+.cart-tool .submit .submit1 {
+  margin-right: 116px;
+}
+.cart-tool .submit .submit1 span input {
+  width: 16px;
+  height: 16px;
+  text-align: center;
+  line-height: 16px;
+}
+.cart-tool .submit .submit2 {
+  text-align: right;
+}
+/* .cart-tool .submit .submit2 a {
+  display: inline-block;
+  width: 96px;
+  height: 40px;
+  text-align: right;
+} */
+.cart-tool .submit .submit2 input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  line-height: 40px;
+  width: 96px;
+  height: 50px;
+  background-color: red;
+}
+ </style>
+</head>
+<body>
+  <div class="w">
+   <div class="cart">
+      <h4>全部商品</h4>
+      <div class="cart-th">
+        <ul>
+          <li class="cart-th1">全部</li>
+          <li class="cart-th2">商品</li>
+          <li class="cart-th3">单价（元）</li>
+          <li class="cart-th4">数量</li>
+          <li class="cart-th5">小计（元）</li>
+          <li class="cart-th6">操作</li>
+        </ul>
+      </div>
+      <div class="cart-main">
+        <ul class="cart-main1 clearfix">
+          <li class="cart-list1">
+            <input type="checkbox" name="" id="">
+          </li>
+          <li class="cart-list2">
+            <img src="./images/goods.png" alt="">
+            <p>米家（MIJIA） 小米小白智能摄像机增强版 1080p高清360度全景拍摄AI增强</p>
+          </li>
+          <li class="cart-list3">
+            <em>语音升级款</em>
+          </li>
+          <li class="cart-list4">
+            <em>399.00</em>
+          </li>
+          <li class="cart-list5">
+            <button>-</button>
+            <input type="text" value="1">
+            <button>+</button>
+          </li>
+          <li class="cart-list6">
+            <em>399</em>
+          </li>
+          <li class="cart-list7">
+            <div><a href="#">删除</a></div>
+            <div><a href="#">移到收藏</a></div>
+          </li>
+        </ul>
+        <ul class="cart-main2 clearfix">
+          <li class="cart-list1">
+            <input type="checkbox" name="" id="">
+          </li>
+          <li class="cart-list2">
+            <img src="./images/goods.png" alt="">
+            <p>华为（MIJIA） 华为metaPRO 30 浴霸4摄像 超清晰</p>
+          </li>
+          <li class="cart-list3">
+            <em>黑色版本</em>
+          </li>
+          <li class="cart-list4">
+            <em>5622.00</em>
+          </li>
+          <li class="cart-list5">
+            <button>-</button>
+            <input type="text" value="1">
+            <button>+</button>
+          </li>
+          <li class="cart-list6">
+            <em>5622</em>
+          </li>
+          <li class="cart-list7">
+            <div><a href="#">删除</a></div>
+            <div><a href="#">移到收藏</a></div>
+          </li>
+        </ul>
+        <ul class="cart-main3 clearfix">
+          <li class="cart-list1">
+            <input type="checkbox" name="" id="">
+          </li>
+          <li class="cart-list2">
+            <img src="./images/goods.png" alt="">
+            <p>iphone 11 max PRO 苹果四摄 超清晰 超费电 超及好用</p>
+          </li>
+          <li class="cart-list3">
+            <em>墨绿色</em>
+          </li>
+          <li class="cart-list4">
+            <em>11399.00</em>
+          </li>
+          <li class="cart-list5">
+            <button>-</button>
+            <input type="text" value="1">
+            <button>+</button>
+          </li>
+          <li class="cart-list6">
+            <em>11399</em>
+          </li>
+          <li class="cart-list7">
+            <div><a href="#">删除</a></div>
+            <div><a href="#">移到收藏</a></div>
+          </li>
+        </ul>
+      </div>
+      <div class="cart-tool">
+        <div class="tool">
+          <div class="select-all">
+            <em><input type="checkbox">全选</em>
+            <ul>
+              <li><a href="#">删除选中的商品</a></li>
+              <li><a href="#">移到我的关注</a></li>
+              <li><a href="#">清除下柜商品</a></li>
+            </ul>
+          </div>
+          <div class="submit">
+            <div class="submit1">
+              <span>已选择<input type="text" value="0">件商品</span> 
+              <span>总价（不含运费）：<input type="text" value="0"></span>
+            </div>
+            <div class="submit2">
+              <a href="#"><input type="submit" value="结算"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+   </div>
+  </div>
+</body>
+</html>
