@@ -2,7 +2,7 @@
   <div class="w">
         <header>
             <div class="logo">
-                <router-link to="/home"><img src="@/assets/images/logo.png" alt=""></router-link>
+                <router-link to="/home"><img src="./images/logo.png" alt=""></router-link>
             </div>
         </header>
         <div class="registerarea">
@@ -135,11 +135,11 @@ header {
     vertical-align: middle;
     width: 20px;
     height: 20px;
-    background: url(@/assets/images/error.png) no-repeat;
+    background: url(./images/error.png) no-repeat;
     margin-top: -2px;
 }
 .success_icon {
-    background: url(@/assets/images/success.png) no-repeat;
+    background: url(./images/success.png) no-repeat;
 }
 .success {
     color: green;

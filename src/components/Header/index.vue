@@ -150,7 +150,7 @@ export default {
     display: block;
     width: 171px;
     height: 61px;
-    background: url('@/assets/images/logo.png') no-repeat;
+    background: url('./images/logo.png') no-repeat;
     /* 隐藏文字1：京东的做法
     font-size: 0; */
     /* 隐藏文字2：淘宝的做法 */

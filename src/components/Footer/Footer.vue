@@ -90,7 +90,7 @@
                 <dl>
                     <dt>帮助中心</dt>
                     <dd>
-                        <img src="@/assets/images/wx_cz.jpg" alt="">
+                        <img src="./images/wx_cz.jpg" alt="">
                         品优购客户端
                     </dd>
                 </dl>

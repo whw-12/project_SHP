@@ -17,18 +17,30 @@
           <a href="#">{{searchParams.trademark.split(':')[1]}}</a>
           <em @click="removeTradeMark">x</em>
         </li>
+        <li v-for="(attrvalue,index) in searchParams.props" :key="index">
+          <a href="#">{{attrvalue.split(':')[1]}}</a>
+          <em @click="removeAttrvalue(index)">x</em>
+        </li>
       </ul>
     </div>
-    <SearchSelector @trademarkInfo= "trademarkInfo"></SearchSelector>
+    <SearchSelector @trademarkInfo= "trademarkInfo" @attrInfo = "attrInfo"></SearchSelector>
     <div class="content">
       <div class="content-navbar">
         <ul>
-          <li class="navbar1"><a href="#">综合</a></li>
-          <li><a href="#">销量</a></li>
-          <li><a href="#">新品</a></li>
-          <li><a href="#">评价</a></li>
-          <li><a href="#">价格⬆</a></li>
-          <li><a href="#">价格⬇</a></li>
+          <li :class="{navbar1:isone}">
+            <a href="javascript:;" @click="changeOrder(1)">
+              综合<span class="iconfont" :class="{'icon-down':isdesc,'icon-up':isasc}" v-show="isone">
+                </span>
+            </a>
+          </li>
+          <li :class="{navbar1:istwo}">
+            <a href="javascript:;" @click="changeOrder(2)">
+            价格<span class="iconfont" :class="{'icon-down':isdesc,'icon-up':isasc}" v-show="istwo"></span>
+            </a>
+          </li>
+          <li><a href="javascript:;">销量</a></li>
+          <li><a href="javascript:;">新品</a></li>
+          <li><a href="javascript:;">评价</a></li>
         </ul>
       </div>
     </div>
@@ -51,8 +63,8 @@
             </span>
           </div> 
           <div class="shopcar">
-            <span class="shopcar1"><a href="#">加入购物车</a></span>
-            <span class="shopcar2"><a href="#">收藏</a></span>
+            <span class="shopcar1"><a href="javascript:;">加入购物车</a></span>
+            <span class="shopcar2"><a href="javascript:;">收藏</a></span>
           </div>
         </li>
       </ul>
@@ -94,7 +106,7 @@ export default {
       category3Id: '',
       categoryName: '',
       keyword: '',
-      order: '',
+      order: '1:desc',
       pageNo: 1,
       pageSize: 20,
       props: [],
@@ -125,12 +137,33 @@ export default {
       }
     },
      trademarkInfo(trademark) {
-      console.log(trademark);
       this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`
       this.getData()
     },
     removeTradeMark() {
       this.searchParams.trademark=''
+      this.getData()
+    },
+    attrInfo(attrs,attrvalue) {
+      var props = `${attrs.attrId}:${attrvalue}:${attrs.attrName}`
+      if(this.searchParams.props.indexOf(props)==-1) this.searchParams.props.push(props)
+      this.getData()
+    },
+    removeAttrvalue(index) {
+      // 清除数组中索引为index的
+      this.searchParams.props.splice(index,1)
+    },
+    // 排序
+    changeOrder(flag) {
+      const orderflag = this.searchParams.order.split(':')[0]
+      const orderdown = this.searchParams.order.split(':')[1]
+      var newOrder = ''
+      if(flag == orderflag) {
+        newOrder =  `${orderflag}:${orderdown=='desc' ? 'asc' : 'desc' }`
+      }else {
+        newOrder = `${flag}:${'desc'}`
+      }
+      this.searchParams.order = newOrder
       this.getData()
     }
   },
@@ -148,7 +181,19 @@ export default {
   //   })
   // }
   computed: {
-    ...mapGetters(['goodsList'])
+    ...mapGetters(['goodsList']),
+    isone() {
+      return this.searchParams.order.indexOf(1) != -1
+    },
+    istwo() {
+      return this.searchParams.order.indexOf(2) != -1
+    },
+    isasc() {
+      return this.searchParams.order.indexOf('asc') != -1
+    },
+    isdesc() {
+      return this.searchParams.order.indexOf('desc') != -1
+    }
   },
   watch: {
     $route() {
