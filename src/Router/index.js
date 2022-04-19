@@ -3,15 +3,9 @@ import Vue from "vue";
 import vueRouter from 'vue-router'
 // 使用插件
 Vue.use(vueRouter)
-import Home from '@/pages/Home/index.vue'
-import Register from '@/pages/Register/index'
-import Login from '@/pages/Login/index'
-import Search from '@/pages/Search/index'
-import ShopCar from '@/pages/ShopCar/index'
-import Payzhifu from '@/pages/Payzhifu/index'
-import Paysuccess from '@/pages/Paysuccess/index'
 import VueRouter from "vue-router";
-
+import routes from './routes.js'
+import store from '@/store'
 
 let originPush = VueRouter.prototype.push
 let originReplace = VueRouter.prototype.replace
@@ -29,18 +23,48 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
     originReplace.call(this,location,()=>{},()=>{})
   }
 }
-
-const router = new vueRouter({
-  routes: [
-    {path: '',redirect:'/home'},
-    { path: '/home', component: Home, meta:{show:true} },
-    { path: '/register', component: Register,meta:{show:false} },
-    { path: '/login', component: Login,meta:{show:false} },
-    { path: '/search/:keyword?', component: Search, meta: { show: true }, name: 'search' },
-    { path: '/shopcar', component: ShopCar },
-    { path: '/payzhifu', component: Payzhifu },
-    { path: '/paysuccess', component: Paysuccess}
-]}
-)
 // 配置路由
+const router = new vueRouter({
+  routes,
+  scrollBehavior() {
+    // 始终滚动到顶部
+    return { y: 0 }
+  },
+})
+
+//全局守卫，前置守卫
+router.beforeEach( async (to,from,next) => {
+  next()
+  let token = store.state.user.token
+  let name = store.state.user.userInfo.name
+  if (token) {
+    if (to.path == '/login' || to.path == '/register') {
+      next('/home')
+    } else {
+      if (name) {
+        next()
+      } else {
+          //获取用户信息
+        try {
+            //获取用户信息成功
+          await store.dispatch('getUserInfo')
+          next()
+          } catch (error) {
+            //token失效了
+          await store.dispatch('userLogOut')
+          next('/login')
+          }
+      }
+    }
+  } else {
+    //未登录不能去交易、支付相关、个人中心
+    let topath = to.path
+    if (topath.indexOf('/trade') != -1 || topath.indexOf('/pay') != -1 || topath.indexOf('/center') != -1) {
+      next(`/login?redirect =` + topath)
+      //把未登录的时候想去而没有去成的信息，存在路由中
+    } else {
+      next()
+    }
+  }
+})
 export default router

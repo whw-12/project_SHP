@@ -1,5 +1,7 @@
 <template>
   <div class="pay-main w">
+    <el-button type="primary" icon="el-icon-plus">测试</el-button>
+    
     <div class="first">
       <div class="success">
         <span class="success-icon"></span>
@@ -7,12 +9,12 @@
       </div>
       <div class="paymark">
         <div class="paymark1">
-          请您在提交订单<em class="style_red">4小时</em>之内完成支付，超时订单会自动取消。订单号：145687
+          请您在提交订单<em class="style_red">4小时</em>之内完成支付，超时订单会自动取消。订单号：{{orderId}}
         </div>
         <div class="money">
           <ul>
             <li class="z">应付金额：</li>
-            <li class="x">￥17,654</li>
+            <li class="x">￥{{payInfo.totalFee}}</li>
           </ul>
         </div>
       </div>
@@ -60,7 +62,7 @@
         </div>
         <div class="last3">
           <div class="submit">
-            <router-link to="/paysuccess">立即支付</router-link>
+            <a @click="open">立即支付</a>
           </div>
           <h5 class="zfb3">其他支付方式</h5>
           <div class="weixin">
@@ -73,8 +75,82 @@
 </template>
 
 <script>
+import QRCode from 'qrcode'
 export default {
-  name: 'payZhifu'
+  name: 'payZhifu',
+  data() {
+    return {
+      payInfo: {},
+      timer: null,
+      //支付状态码
+      code: ''
+    }
+  },
+  computed: {
+    orderId() {
+      return this.$route.query.orderId
+    }
+  },
+  mounted() {
+    //不要再生命周期函数前面加async
+    this.getPayInfo()
+  },
+  methods: {
+    // 获取支付信息
+    async getPayInfo() {
+      let result = await this.$API.reqPayInfo(this.orderId)
+      // console.log(result);
+      if(result.code == 200) {
+        this.payInfo = result.data
+      }
+    },
+    // 遮挡层
+    async open() {
+      //生成二维码
+        let url = await QRCode.toDataURL('this.payInfo.codeUrl')
+        
+        this.$alert(`<img src="${url}" />`, '请您微信支付', {
+          dangerouslyUseHTMLString: true,
+          center: true,
+          showCancelButton: true,
+          cancelButtonText: '支付遇见问题',
+          confirmButtonText: '已支付成功',
+          showClose: false,
+          beforeClose: (type,instance,done) => {
+            if(type=='cancel') {
+              alert('请联系管理员')
+              clearInterval(this.timer)
+              this.timer = null
+              done()
+            } else {
+              // if(this.code == 200) {
+                clearInterval(this.timer)
+                this.timer = null
+                done()
+                this.$router.push('/paysuccess')
+              // }
+            }
+          }
+        });
+        if(!this.timer) {
+          this.timer = setInterval(async ()=> {
+            //发请求获取支付的状态
+            let result = await this.$API.reqPayStatus(this.orderId)
+            console.log(result);
+            if(result.code == 200) {
+              //清除定时器
+              clearInterval(this.timer)
+              this.timer = null
+              this.code = result.code
+              //关闭弹窗
+              this.$msgbox.close()
+
+              this.$router.push('/paysuccess')
+            }
+          },1000)
+        }
+      },
+  }
 
 }
 </script>
@@ -183,6 +259,7 @@ export default {
 .last .last-footer .last3 {
   margin: 10px;
   text-align: center;
+  cursor: pointer;
 }
 .last .last-footer .last3 .submit {
   display: inline-block;

@@ -6,17 +6,25 @@
             <div class="fl">
                 <ul>
                     <li class="fl">品优购欢迎您！&nbsp;</li>
-                    <li class="fl">
+                    <li class="fl" v-if="!userName">
                         <router-link to="/login">请登录</router-link>&nbsp;
                         <router-link to="/register" class="style_red">免费注册</router-link>
+                    </li>
+                    <li class="fl" v-else>
+                        <a>{{ userName }}</a>
+                        <a class="style_red" @click="logout">退出登录</a>
                     </li>
                 </ul>
             </div>
             <div class="fr">
                 <ul>
-                    <li>我的订单</li>
+                    <li>
+                        <router-link to="/center/myorder">我的订单</router-link>
+                    </li>
                     <li class="one"></li>
-                    <li class="arrow_icon">我的品优购</li>
+                    <li class="arrow_icon">
+                        <router-link to="/shopcar">我的购物车</router-link>
+                    </li>
                     <li></li>
                     <li>品优购会员</li>
                     <li></li>
@@ -90,12 +98,25 @@ export default {
             location.query = this.$route.query
             this.$router.push(location)
         }
+      },
+      async logout() {
+          try {
+              await this.$store.dispatch('userLogOut')
+              this.$router.push('/home')
+          } catch (error) {
+              return Promise.reject(new Error('faile'))
+          }
       }
   },
   mounted() {
       this.$bus.$on("clear",()=>{
           this.keyword=''
       })
+  },
+  computed: {
+      userName() {
+          return this.$store.state.user.userInfo.name
+      }
   }
 
 }

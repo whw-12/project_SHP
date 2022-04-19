@@ -15,40 +15,38 @@
                     <ul>
                         <li>
                             <label for="">手机号：</label>
-                            <input type="text" class="inp">
-                            <span class="error">
-                                <i class="error_icon"></i>
-                                手机号码格式不正确，请从新输入 
-                            </span>
+                            <input class="inp" placeholder="请输入你的手机号" v-model="phone" name="phone" v-validate="{ required: true, regex: /^1\d{10}$/ }" :class="{ invalid: errors.has('phone') }"/>
+                            <span class="error-msg error">{{ errors.first("phone") }}</span>
                         </li>
                         <li>
                             <label for="">短信验证码：</label>
-                            <input type="text" class="inp">
+                            <input class="inp" placeholder="请输入你的验证码" v-model="code" name="code" v-validate="{ required: true, regex: /^\d{6}$/ }" :class="{ invalid: errors.has('code') }"/>
                             <span class="success">
-                                <i class="success_icon"></i>
-                                短信验证码输入正确
+                                <button style="height:37px" @click.prevent="getCode">请输入验证码</button>
+                                <span class="error-msg error">{{ errors.first("code") }}</span>
                             </span>
                         </li>
                         <li>
                             <label for="">登录密码：</label>
-                            <input type="password" class="inp">
-                            <span class="error">
-                                <i class="error_icon"></i>
-                                手机号码格式不正确，请从新输入 
-                            </span>
+                            <input class="inp" placeholder="请输入你的密码" v-model="password" name="password" v-validate="{ required: true, regex: /^[0-9A-Za-z]{8,20}$/ }" :class="{ invalid: errors.has('password') }"/>
+                            <span class="error-msg error">{{ errors.first("password") }}</span>
+                            
                         </li>
                         <li class="safe">安全程度 <em class="ruo">弱</em><em class="zhong">中</em><em class="qiang">强</em></li>
                         <li>
                             <label for="">确认密码：</label>
-                            <input type="password" class="inp">
-                            <span class="error">
-                                <i class="error_icon"></i>
-                                手机号码格式不正确，请从新输入 
-                            </span>
+                            <input class="inp" placeholder="请输入确认密码" v-model="password1" name="password1" v-validate="{ required: true, is:password }" :class="{ invalid: errors.has('password1') }"/>
+                            <span class="error-msg error">{{ errors.first("password1") }}</span>
+                            
                         </li>
-                        <li class="agree"><input type="checkbox">同意协议并注册
-                        <a href="#">《知果果用户协议》</a></li>
-                        <li><input type="submit" value="完成注册" class="btn"></li>
+                        <li class="agree">
+                            <input type="checkbox" v-model="agree" name="agree" v-validate="{ required: true, 'tongyi': true }" :class="{ invalid: errors.has('agree') }"/>
+                            
+                            同意协议并注册
+                            <a href="#">《知果果用户协议》</a>
+                            <span class="error-msg error">{{ errors.first("agree") }}</span>
+                        </li>
+                        <li><input type="submit" value="完成注册" class="btn" @click.prevent="userRegister"></li>
                     </ul>
                 </form>
             </div>
@@ -75,7 +73,46 @@
 <script>
 
 export default {
-  name: 'Register-1'
+  name: 'Register-1',
+  data() {
+      return {
+          //收集手机号
+          phone: '',
+        //   验证码
+          code: '',
+        //   密码
+          password: '',
+        //   确认密码
+          password1: '',
+          //是否同意
+          agree:true
+      }
+  },
+  methods: {
+      async getCode() {
+          try {
+              const {phone} = this
+              phone && (await this.$store.dispatch("getCode",phone))
+              this.code = this.$store.state.user.code
+          } catch(error) {
+              return 'faile'
+          }
+      },
+      async userRegister() {
+          const success = await this.$validator.validateAll();
+          //全部表单验证成功，在向服务器发请求，进行祖册
+          //只要有一个表单没有成功，不会发请求
+         if(success) {
+              try {
+              const {phone,code,password} = this;
+              await this.$store.dispatch('userRegister',{phone,code,password});
+              this.$router.push('/login')
+            } catch (error) {
+              alert(1)
+          }
+      }
+         }
+  }
 }
 </script>
 
@@ -85,6 +122,8 @@ header {
     border-bottom: 2px solid #c81523;
 }
 .logo {
+    width: 171px;
+    height: 61px;
     padding-top: 18px;
 }
 .registerarea {

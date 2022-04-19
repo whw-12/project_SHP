@@ -7,7 +7,7 @@
       </div>
       <div class="paydetail">
         <ul>
-          <li class="left"> <router-link to="/payzhifu">查看订单</router-link> </li>
+          <li class="left"> <router-link to="/center">查看订单</router-link> </li>
           <li class="right"> <router-link to="/home">继续购物</router-link> </li>
         </ul>
       </div>

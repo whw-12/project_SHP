@@ -48,9 +48,9 @@
     <div class="content-content">
       <ul class="clearfix">
         <li v-for="good in goodsList" :key="good.id">
-          <a href="#">
-            <img :src="good.defaultImg" alt="">
-          </a>
+          <router-link :to="`/detail/${good.id}`">
+            <img v-lazy="good.defaultImg" alt="">
+          </router-link>
           <h2>¥<em class="price">{{ good.price }}</em></h2>
           <p title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】">
             <a href="#">
@@ -69,29 +69,15 @@
         </li>
       </ul>
     </div>
-    <div class="footers">
-      <div class="footer">
-       <ul  class="clearfix">
-        <li><a href="#">«上一页</a></li>
-        <li class="active"><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-        <li class="dotted"><span>...</span></li>
-        <li><a href="#">下一页»</a></li>
-      </ul>
-      <div>
-        <span>共10页</span>
-      </div>
-    </div>
+    <div class="clearfix">
+      <PaginationName :pageNo='searchParams.pageNo' :pageSize='searchParams.pageSize' :total='total' :continues='5' @getPageNo="getPageNo"></PaginationName>
     </div>
   </div>
 </template>
 
 <script>
 // import {mapState} from 'vuex'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapState} from 'vuex'
 import SearchSelector from '@/pages/Search/SearchSelector/index.vue'
 export default {
   name: 'Search-1',
@@ -108,7 +94,7 @@ export default {
       keyword: '',
       order: '1:desc',
       pageNo: 1,
-      pageSize: 20,
+      pageSize: 6,
       props: [],
       trademark:''
     }
@@ -165,6 +151,10 @@ export default {
       }
       this.searchParams.order = newOrder
       this.getData()
+    },
+    getPageNo(pageNo) {
+      this.searchParams.pageNo = pageNo
+      this.getData()
     }
   },
   beforeMount() {
@@ -193,7 +183,10 @@ export default {
     },
     isdesc() {
       return this.searchParams.order.indexOf('desc') != -1
-    }
+    },
+    ...mapState({
+      total: state=>state.search.searchInfo.total
+    })
   },
   watch: {
     $route() {
@@ -356,57 +349,5 @@ export default {
 .content-content .shopcar .shopcar2 a:hover {
   color: #fff;
   background-color: gray;
-}
-/* footer */
-.footers {
-  text-align: center;
-  margin-top: 30px;
-  height: 38px;
-  margin-bottom: 40px;
-}
-.footer{
-  display: inline-block;
-  /* margin-top: 30px; */
-  height: 38px;
-  /* text-align: center; */
-  background-color: #fff;
-  width: 580px;
-}
-.footer ul{
-  display: inline-block;
-  /* width: 490px; */
-}
-.footer ul li {
-  float: left;
-  height: 38px;
-  /* margin: 0 10px; */
-  margin-left: 20px;
-  line-height: 38px;
-  background-color: #fafafa;
-  border: 1px solid #999;
-}
-.footer ul .dotted {
-  border: 0;
-}
-.footer ul .active {
-  border: 0;
-}
-.footer ul .active a:hover {
-  text-decoration: underline;
-  cursor: default;
-}
-.footer ul li a {
-  font-size: 14px;
-  padding: 0 10px;
-}
-.footer div {
-  float: right;
-  font-size: 14px;
-   text-align: left;
-  height: 38px;
-}
-.footer div span {
-  height: 38px;
-  line-height: 38px;
 }
 </style>

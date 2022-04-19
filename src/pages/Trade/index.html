@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    /* 把我们所有标签的内外边距清零 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* em 和 i 斜体的文字不倾斜 */
+em,
+i {
+  font-style: normal
+}
+
+/* 去掉li 的小圆点 */
+li {
+  list-style: none
+}
+
+img {
+  /* border 0 照顾低版本浏览器 如果 图片外面包含了链接会有边框的问题 */
+  border: 0;
+  /* 取消图片底侧有空白缝隙的问题 */
+  vertical-align: middle
+}
+
+button {
+  /* 当我们鼠标经过button 按钮的时候，鼠标变成小手 */
+  cursor: pointer
+}
+
+a {
+  color: #666;
+  text-decoration: none
+}
+
+a:hover {
+  color: #c81623
+}
+
+button,
+input {
+  /* "\5B8B\4F53" 就是宋体的意思 这样浏览器兼容性比较好 */
+  font-family: Microsoft YaHei, Heiti SC, tahoma, arial, Hiragino Sans GB, "\5B8B\4F53", sans-serif;
+  /* 默认有灰色边框我们需要手动去掉 */
+  border: 0;
+  outline: none;
+}
+
+body {
+  /* CSS3 抗锯齿形 让文字显示的更加清晰 */
+  -webkit-font-smoothing: antialiased;
+  background-color: #fff;
+  font: 12px/1.5 Microsoft YaHei, Heiti SC, tahoma, arial, Hiragino Sans GB, "\5B8B\4F53", sans-serif;
+  color: #666
+}
+
+.hide,
+.none {
+  display: none
+}
+
+/* 清除浮动 */
+.clearfix:after {
+  visibility: hidden;
+  clear: both;
+  display: block;
+  content: ".";
+  height: 0
+}
+
+.clearfix {
+  *zoom: 1
+}
+
+/* 版心 */
+.w {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.style_red {
+  color: #c40000;
+}
+/* ---------------------------------------------------- */
+h3 {
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+.content {
+  padding: 25px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+}
+.content h4 {
+  margin-top: 10px;
+}
+.content ul {
+  padding: 10px;
+}
+.content ul li {
+  height: 30px;
+  margin: 10px 0;
+  line-height: 30px;
+}
+.content .s1 {
+  position: relative;
+  float: left;
+  width: 100px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  border: 1px solid #e1251b;
+}
+.content .s1::after {
+  position: absolute;
+  content: '';
+  width: 13px;
+  height: 13px;
+  right: 0;
+  bottom: 0;
+  background: url('./images/choosed.png') no-repeat;
+}
+.content ul li p {
+  float: left;
+  width: 610px;
+  height: 30px;
+  margin-left: 10px;
+}
+.content ul li p:hover {
+  background-color: #ddd;
+}
+.content ul li p .s2 {
+  float: left;
+  line-height: 30px;
+}
+.content ul li p .s3 {
+  float: left;
+  line-height: 30px;
+  margin-left: 5px;
+}
+.content ul li p .s4 {
+  display: inline-block;
+  width: 56px;
+  height: 24px;
+  text-align: center;
+  line-height: 24px;
+  margin-left: 10px;
+  background-color: #878787;
+}
+.content .s5 {
+  display: inline-block;
+  margin-left: 10px;
+  width: 100px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+.way {
+  padding: 15px;
+  background-color: #f4f4f4;
+}
+.way h4 {
+  height: 50px;
+  line-height: 50px;
+}
+.way p {
+  margin-top: 20px;
+}
+.way p em {
+  /* display: inline-block; */
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  margin-left: 10px;
+}
+.shoplist {
+  margin-top: 5px;
+  padding: 15px;
+  background-color: #feedef;
+}
+.shoplist ul {
+  height: 82px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.shoplist ul li {
+  float: left;
+  height: 82px;
+}
+.shoplist ul .l1 {
+  width: 82px;
+  height: 82px;
+}
+.shoplist ul .l1 img {
+  width: 82px;
+  height: 82px;
+}
+.shoplist ul .l2 {
+  margin-left: 100px;
+}
+.shoplist ul .l2 p {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+.shoplist ul .l2 h4 {
+  color: #c81623;
+  font-weight: 400;
+}
+.shoplist ul .l3 {
+  color: #e12228;
+}
+.shoplist ul .l4 {
+  margin-left: 100px;
+}
+.shoplist ul .l5 {
+  float: right;
+}
+.text {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+.text textarea {
+  width: 100%;
+  margin-top: 10px;
+  border-color: #e4e2e2;
+  line-height: 1.8;
+  outline: none;
+  resize: none;
+}
+.last {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+.money {
+  margin-bottom: 20px;
+}
+.money ul li p {
+  float: right;
+}
+.money ul li p .red {
+  color: red;
+}
+.money ul li p span {
+  float: left;
+}
+.money ul li p em {
+  float: right;
+  margin-left: 50px;
+}
+
+
+.footer {
+  border: 1px solid #ddd;
+  background-color: #f4f4f4;
+  margin-bottom: 20px;
+}
+.footer {
+  padding: 15px;
+}
+.footer .first,
+.second {
+  position: relative;
+  height: 30px;
+  line-height: 30px;
+}
+.footer .first em {
+  position: absolute;
+  right: 0;
+  padding: 0 5px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #e12228;
+}
+.footer .first span {
+  position: absolute;
+  right: 100px;
+}
+.footer .second p {
+  position: absolute;
+  right: 0px;
+}
+button {
+  float: right;
+  width: 164px;
+  height: 56px;
+  color: #fff;
+  background-color: #e1251b;
+  line-height: 56px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+  </style>
+</head>
+<body>
+  <div class="w trade-container">
+    <h3>填写并核对信息</h3>
+    <div class="content">
+      <h4>收件人信息</h4>
+      <ul class="clearfix">
+        <li class="clearfix">
+          <span class="s1">张三</span>
+          <p>
+            <span class="s2">北京市昌平区宏福科技园综合楼6层</span>
+            <span class="s3">15011111111</span>
+            <span class="s4">默认地址</span>
+          </p>
+        </li>
+        <li>
+          <span class="s1">李四</span>
+          <p>
+            <span class="s2">北京市昌平区宏福科技园综合楼6层</span>
+            <span class="s3">15011111111</span>
+            <span class="s4">默认地址</span>
+          </p>
+        </li>
+        <li>
+          <span class="s1">王五</span>
+          <p>
+            <span class="s2">北京市昌平区宏福科技园综合楼6层</span>
+            <span class="s3">15011111111</span>
+            <span class="s4">默认地址</span>
+          </p>
+        </li>
+      </ul>
+      <h4>支付方式</h4>
+      <ul>
+        <li>
+          <span class="s1">在线支付</span>
+          <span class="s5">货到付款</span>
+        </li>
+      </ul>
+      <div class="way">
+        <h4>配送方式</h4>
+        <p>
+          <span class="s1">天天快递</span>
+          <em>配送时间：预计8月10日（周三）09:00-15:00送达</em>
+        </p>
+      </div>
+      <div class="shoplist clearfix">
+        <h4>商品清单</h4>
+        <ul class="u1">
+          <li class="l1"><img src="./images/goods.png" alt=""></li>
+          <li class="l2">
+            <p>Apple iPhone 6s (A1700) 64G 玫瑰金色 移动联通电信4G手机硅胶透明防摔软壳 本色系列</p>
+            <h4>7天无理由退货</h4>
+          </li>
+          <li class="l3">￥5399.00</li>
+          <li class="l4">x1</li>
+          <li class="l5">有货</li>
+        </ul>
+        <ul class="u2">
+          <li class="l1"><img src="./images/goods.png" alt=""></li>
+          <li class="l2">
+            <p>Apple iPhone 6s (A1700) 64G 玫瑰金色 移动联通电信4G手机硅胶透明防摔软壳 本色系列</p>
+            <h4>7天无理由退货</h4>
+          </li>
+          <li class="l3">￥5399.00</li>
+          <li class="l4">x1</li>
+          <li class="l5">有货</li>
+        </ul>
+      </div>
+      <h4>买家留言：</h4>
+      <div class="text">
+        <textarea name="" id="" placeholder="建议留言前先于商家沟通确认"></textarea>
+      </div>
+      <h4>发票信息：</h4>
+      <p class="last">普通发票（电子）个人&nbsp;明细</p>
+      <h4>使用优惠/抵用</h4>
+
+    </div>
+    <div class="money clearfix">
+      <ul>
+        <li class="clearfix">
+          <p>
+            <span class="red">1</span><span>件商品，总商品金额</span>
+            <em>￥5399.00</em>
+          </p>   
+        </li>
+        <li class="clearfix">
+          <p>
+            <span>返现：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <em>0.00</em>
+          </p>
+        </li>
+        <li class="clearfix">
+          <p>
+            <span>运费：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <em>0.00</em>
+          </p>
+        </li>
+      </ul>
+    </div>
+    <div class="footer">
+      <div class="first">
+        <span>应付金额：</span>
+        <em>￥5300.00</em>
+      </div>
+      <div class="second">
+        <p>寄送至: 北京市昌平区宏福科技园综合楼6层 收货人：张三1501065879</p>
+      </div>
+    </div>
+    <button>提交订单</button>
+  </div>
+</body>
+</html>

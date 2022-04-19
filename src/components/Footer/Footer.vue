@@ -141,7 +141,7 @@ export default {
     float: left;
     width: 50px;
     height: 50px;
-    background: url(@/assets/images/icons.png) no-repeat -252px -2px;
+    background: url(~@/assets/images/icons.png) no-repeat -252px -2px;
     margin-right: 8px;
 }
 .mod_service ul li .service_txt h4 {

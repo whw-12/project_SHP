@@ -3,6 +3,7 @@
    <div class="cart">
       <h4>全部商品</h4>
       <div class="cart-th">
+        <!-- 标题 -->
         <ul>
           <li class="cart-th1">全部</li>
           <li class="cart-th2">商品</li>
@@ -13,94 +14,38 @@
         </ul>
       </div>
       <div class="cart-main">
-        <ul class="cart-main1 clearfix">
+        <ul class="cart-main1 clearfix" v-for="cart in cartInfoList" :key="cart.id">
           <li class="cart-list1">
-            <input type="checkbox" name="" id="">
+            <input type="checkbox" name="" id="" :checked="cart.isChecked == 1" @change="updateChecked(cart,$event)">
           </li>
           <li class="cart-list2">
-            <img src="./images/goods.png" alt="">
-            <p>米家（MIJIA） 小米小白智能摄像机增强版 1080p高清360度全景拍摄AI增强</p>
-          </li>
-          <li class="cart-list3">
-            <em>语音升级款</em>
+            <img :src="cart.imgUrl" alt="">
+            <p>cart.skuName</p>
           </li>
           <li class="cart-list4">
-            <em>399.00</em>
+            <em>{{cart.skuPrice}}</em>
           </li>
           <li class="cart-list5">
-            <button>-</button>
-            <input type="text" value="1">
-            <button>+</button>
+            <button @click="handler(-1,cart,'reduce')">-</button>
+            <input type="text" :value="cart.skuNum" @change="handler($event.target.value,cart,'change')">
+            <button @click="handler(1,cart,'add')">+</button>
           </li>
           <li class="cart-list6">
-            <em>399</em>
+            <em>{{cart.skuNum*cart.skuPrice}}</em>
           </li>
           <li class="cart-list7">
-            <div><a href="#">删除</a></div>
-            <div><a href="#">移到收藏</a></div>
-          </li>
-        </ul>
-        <ul class="cart-main2 clearfix">
-          <li class="cart-list1">
-            <input type="checkbox" name="" id="">
-          </li>
-          <li class="cart-list2">
-            <img src="./images/goods.png" alt="">
-            <p>华为（MIJIA） 华为metaPRO 30 浴霸4摄像 超清晰</p>
-          </li>
-          <li class="cart-list3">
-            <em>黑色版本</em>
-          </li>
-          <li class="cart-list4">
-            <em>5622.00</em>
-          </li>
-          <li class="cart-list5">
-            <button>-</button>
-            <input type="text" value="1">
-            <button>+</button>
-          </li>
-          <li class="cart-list6">
-            <em>5622</em>
-          </li>
-          <li class="cart-list7">
-            <div><a href="#">删除</a></div>
-            <div><a href="#">移到收藏</a></div>
-          </li>
-        </ul>
-        <ul class="cart-main3 clearfix">
-          <li class="cart-list1">
-            <input type="checkbox" name="" id="">
-          </li>
-          <li class="cart-list2">
-            <img src="./images/goods.png" alt="">
-            <p>iphone 11 max PRO 苹果四摄 超清晰 超费电 超及好用</p>
-          </li>
-          <li class="cart-list3">
-            <em>墨绿色</em>
-          </li>
-          <li class="cart-list4">
-            <em>11399.00</em>
-          </li>
-          <li class="cart-list5">
-            <button>-</button>
-            <input type="text" value="1">
-            <button>+</button>
-          </li>
-          <li class="cart-list6">
-            <em>11399</em>
-          </li>
-          <li class="cart-list7">
-            <div><a href="#">删除</a></div>
+            <div><a @click="deleteCartById(cart)">删除</a></div>
             <div><a href="#">移到收藏</a></div>
           </li>
         </ul>
       </div>
+      <!-- 全选 -->
       <div class="cart-tool">
         <div class="tool">
           <div class="select-all">
-            <em><input type="checkbox">全选</em>
+            <em><input type="checkbox" :checked="isAllChecked" @change="updateAllCartChecked1">全选</em>
             <ul>
-              <li><a href="#">删除选中的商品</a></li>
+              <li><a @click="deleteAllCheckedStatu">删除选中的商品</a></li>
               <li><a href="#">移到我的关注</a></li>
               <li><a href="#">清除下柜商品</a></li>
             </ul>
@@ -108,10 +53,10 @@
           <div class="submit">
             <div class="submit1">
               <span>已选择<input type="text" value="0">件商品</span> 
-              <span>总价（不含运费）：<input type="text" value="0"></span>
+              <span>总价（不含运费）：<input type="text" :value="this.totalPrice"></span>
             </div>
             <div class="submit2">
-              <router-link to="/payzhifu"><input type="submit" value="结算"></router-link>
+              <router-link to="/trade"><input type="submit" value="结算"></router-link>
             </div>
           </div>
         </div>
@@ -121,9 +66,100 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
   export default {
     name: 'ShopCart',
+    mounted() {
+      // this.$store.dispatch('getCartList')
+      //这里可以写但是为了防止发送多余的请求
+      this.getDate()
+    },
+    methods: {
+      getDate() {
+        this.$store.dispatch('getCartList')
+      },
+      async handler(disnum,cart,type) {
+        switch(type) {
+          case 'reduce':
+            disnum = cart.skuNum>1? -1:0
+            break;
+          case 'add':
+            disnum = 1;
+            break;
+          case 'change':
+            if(isNaN(disnum) || disnum<1) {
+              disnum = 0
+            } else {
+              disnum = parseInt(disnum) - cart.skuNum
+            }
+              break;
+        }
+        try {
+          await this.$store.dispatch('addOrUpdateShopCart',{skuId:cart.skuId,skuNum:disnum})
+          this.getDate()
+        } catch (error) {
+          return
+        }
+      },
+      // 删除某一个产品
+      async deleteCartById (cart) {
+        try {
+          await this.$store.dispatch('deleteCartById',cart.skuId)
+          this.getDate()
+        } catch (error) {
+          alert(error.message)
+        }
+      },
+      // 修改某一个产品 的状态
+      async updateChecked(cart,event) {
+          try {
+            let isChecked = event.target.checked ? 1 : 0;
+            // k v 一致省略v
+            await this.$store.dispatch('statusCartById',{skuId:cart.skuId,isChecked})
+            this.getDate()
+          } catch (error) {
+            return Promise.reject(new Error('faile'))
+          }
+      },
+      // 删除全部选中的商品
+      async deleteAllCheckedStatu () {
+        try {
+          await this.$store.dispatch('deleteAllCheckedStatus')
+          this.getDate()
+        } catch (error) {
+          alert(error.message)
+        }
+      },
+      //全选
+      async updateAllCartChecked1(event) {
+        try {
+          const checked = event.target.checked ? '1' : '0'
+        await this.$store.dispatch('updateAllCartChecked2',checked)
+        this.getDate()
+        } catch (error) {
+          alert(error.message)
+        }
+      }
+    },
+    computed: {
+      ...mapGetters(['cartList']),
+      cartInfoList() {
+        return this.cartList.cartInfoList || []
+      },
+      totalPrice() {
+        let sum = 0;
+        this.cartInfoList.forEach(item => {
+          sum+= item.skuNum * item.skuPrice
+        });
+        return sum;
+    },
+      isAllChecked () {
+      return this.cartInfoList.every(item => item.isChecked == 1) 
+    }
+
   }
+
+}
 </script>
 
 <style lang="less" scoped>
@@ -157,6 +193,7 @@
 .cart-main {
   margin-top: 10px;
   border: 1px solid #ddd;
+  border-bottom: 0;
 }
 .cart-main ul {
   height: 103px;
@@ -166,11 +203,12 @@
   float: left;
 }
 .cart-main ul .cart-list1 {
-  width: 48px;
+  width: 15%;
 }
 .cart-main ul .cart-list2 {
   height: 82px;
-  width: 295px;
+  width: 35%;
+  margin-left: 20px;
 }
 .cart-main ul .cart-list2 img {
   width: 82px;
@@ -181,15 +219,11 @@
   margin: 0 10px;
   width: 150px;
 }
-.cart-main ul .cart-list3 {
-  width: 245px;
-  text-align: center;
-}
 .cart-main ul .cart-list4 {
-  width: 147px;
+  width: 100px;
 }
 .cart-main ul .cart-list5 {
-  width: 147px;
+  width: 180px;
 }
 .cart-main ul .cart-list5 input {
   width: 40px;
@@ -210,8 +244,7 @@
   width: 147px;
   font-size: 16px;
 }
-.cart-main1
-,.cart-main2 {
+.cart-main1 {
   border-bottom: 1px solid #ddd;
 }
 /* ------------------------------------ */
@@ -244,15 +277,16 @@ padding: 10px;
   float: right;
 }
 .cart-tool .submit input {
-  width: 0;
-  height: 0;
+  // width: 0;
+  // height: 0;
+  border: 1px solid blue;
 }
 .cart-tool .submit .submit1 {
+  display: inline-block;
   margin-right: 116px;
 }
 .cart-tool .submit .submit1 span input {
-  width: 16px;
-  height: 16px;
+  
   text-align: center;
   line-height: 16px;
 }

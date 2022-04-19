@@ -8,14 +8,15 @@
             <a class="left">扫描登录</a>
             <a class="right">账户登录</a>
           </div>
+          <form action="">
           <ul class="loginuser">
           <li>
             <span>账号</span>
-            <input type="text" value="邮箱/用户名/手机号">
+            <input type="text" placeholder="邮箱/用户名/手机号" v-model="phone">
           </li>
           <li>
             <span>密码</span>
-            <input type="text" value="请输入密码">
+            <input type="password" placeholder="请输入密码" v-model="password">
           </li>
           </ul>
           <div class="auto">
@@ -23,8 +24,9 @@
           <em class="auto2">忘记密码？</em>
           </div>
           <div class="btn">
-            <button>登&nbsp;&nbsp;录</button>
+            <button @click.prevent="userlogin">登&nbsp;&nbsp;录</button>
           </div>
+          </form>
           <div class="floor clearfix">
             <ul>
               <li><img src="./images/qq.png" alt=""></li>
@@ -57,7 +59,29 @@
 
 <script>
 export default {
-  name: 'Login-1'
+  name: 'Login-1',
+  data() {
+    return {
+      phone: '',
+      password: ''
+    }
+  },
+  methods: {
+    //登录成功的回调
+      async userlogin() {
+        try {
+          const {phone,password} = this;
+          (phone&&password)&&await this.$store.dispatch('userLogin',{phone,password});
+          //登录的路由组件
+          const toPath = this.$route.query.redirect || '/home';
+          this.$router.push(toPath)
+          
+        }
+        catch (error) {
+          alert(error.message)
+        }
+    }
+  }
 
 }
 </script>
